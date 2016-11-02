@@ -7,7 +7,7 @@ module.exports = yeoman.Base.extend({
   prompting: function () {
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the outstanding ' + chalk.red('generator-express-microservice') + ' generator!'
+      'Welcome to the ' + chalk.yellow('express microservice') + ' generator!'
     ));
 
     var prompts = [{
@@ -37,9 +37,7 @@ module.exports = yeoman.Base.extend({
   },
 
     writing: function () {
-        this.fs.mkdir('lib');
-        this.fs.mkdir('controllers');
-        this.fs.mkdir('middleware');
+        //this.fs.mkdir('middleware'); maybe add automatic basicauthmiddleware?
 
         this.fs.copyTpl(
             this.templatePath('server.js'),
