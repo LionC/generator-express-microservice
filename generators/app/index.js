@@ -11,11 +11,24 @@ module.exports = yeoman.Base.extend({
     ));
 
     var prompts = [{
-      type: 'confirm',
-      name: 'someAnswer',
-      message: 'Would you like to enable this option?',
-      default: true
-    }];
+      type: 'checkbox',
+      name: 'optionalDependencies',
+      message: 'Choose which optional dependencies you would like to install (this generator does not depend on any of them)',
+      choices: [
+          { name: 'body-parser', checked: true },
+          { name: 'express-basic-auth' },
+          { name: 'json-schema-validation-middleware' },
+          { name: 'mongoennung', value: 'Acomodeo/mongoennung' }
+      ]
+  }, {
+      type: 'input',
+      name: 'apiPrefix',
+      message: 'Which API prefix should be used? (enter / for no prefix)',
+      default: '/api',
+      validate: function (prefix) {
+          return prefix.startsWith('/') || 'Prefix has to start with \'/\'';
+      }
+  }];
 
     return this.prompt(prompts).then(function (props) {
       // To access props later use this.props.someAnswer;
@@ -23,14 +36,29 @@ module.exports = yeoman.Base.extend({
     }.bind(this));
   },
 
-  writing: function () {
-    this.fs.copy(
-      this.templatePath('dummyfile.txt'),
-      this.destinationPath('dummyfile.txt')
-    );
-  },
+    writing: function () {
+        this.fs.mkdir('lib');
+        this.fs.mkdir('controllers');
+        this.fs.mkdir('middleware');
+
+        this.fs.copyTpl(
+            this.templatePath('server.js'),
+            this.destinationPath('server.js'),
+            { apiPrefix: this.props.apiPrefix }
+        );
+
+        this.fs.copy(
+            this.templatePath('controllers.js'),
+            this.destinationPath('controllers/index.js')
+        );
+    },
 
   install: function () {
-    this.installDependencies();
+    var dependencies = [ 'express' ];
+
+    for(var i in this.props.optionalDependencies)
+        dependencies.push(this.props.optionalDependencies[i]);
+
+    this.npmInstall(dependencies, { 'save': true });
   }
 });
