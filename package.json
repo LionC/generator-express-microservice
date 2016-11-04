@@ -9,7 +9,8 @@
     "url": "lionc.de"
   },
   "files": [
-    "generators"
+    "generators/app",
+    "generators/rest-controller"
   ],
   "main": "generators/index.js",
   "keywords": [
@@ -17,8 +18,9 @@
     "yeoman-generator"
   ],
   "dependencies": {
-    "yeoman-generator": "^0.23.0",
     "chalk": "^1.0.0",
+    "pluralize": "^3.0.0",
+    "yeoman-generator": "^0.23.0",
     "yosay": "^1.0.0"
   },
   "devDependencies": {
